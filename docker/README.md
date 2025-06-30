@@ -19,35 +19,35 @@ docker/
 ### Production Environment
 ```bash
 # Copy and configure environment variables
-cp docker/.env.example docker/.env
+cp docker/env.example docker/.env
 # Edit docker/.env with your production values
 
 # Start all services
-docker-compose -f docker/compose.yml up -d
+docker compose -f docker/compose.yml up -d
 
 # Check service health
-docker-compose -f docker/compose.yml ps
+docker compose -f docker/compose.yml ps
 ```
 
 ### Development Environment
 ```bash
 # Start development environment
-docker-compose -f docker/compose.dev.yml up -d
+docker compose -f docker/compose.dev.yml up -d
 
 # View logs
-docker-compose -f docker/compose.dev.yml logs -f backend
+docker compose -f docker/compose.dev.yml logs -f backend
 ```
 
 ### Database Only
 ```bash
 # Start only database services (useful for local development)
-docker-compose -f docker/compose.db-only.yml up -d
+docker compose -f docker/compose.db-only.yml up -d
 ```
 
 ### Testing Environment
 ```bash
 # Run all tests in isolated containers
-docker-compose -f docker/compose.test.yml up --abort-on-container-exit
+docker compose -f docker/compose.test.yml up --abort-on-container-exit
 ```
 
 ## 🔧 Available Services
@@ -86,9 +86,9 @@ All services include comprehensive health checks:
 ## 🛠 Development Tips
 
 1. **Hot Reload**: Backend uses Air for automatic reloading
-2. **Logs**: Use `docker-compose logs -f <service>` to follow logs
+2. **Logs**: Use `docker compose logs -f <service>` to follow logs
 3. **Database Access**: Connect directly via `localhost:5432` in development
-4. **Clean Restart**: `docker-compose down -v` removes volumes
+4. **Clean Restart**: `docker compose down -v` removes volumes
 
 ## 📚 Related Documentation
 
