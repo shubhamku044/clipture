@@ -21,7 +21,7 @@ Your application has been successfully containerized and is now production-ready
 │                   Development Setup                    │
 ├─────────────────────────────────────────────────────────┤
 │  Backend API (Go+Gin)      → :8080 (with hot reload)   │
-│  PostgreSQL 14             → :5433 (to avoid conflicts)│
+│  PostgreSQL 14             → :5432 (to avoid conflicts)│
 │  Redis Cache               → :6379                     │
 └─────────────────────────────────────────────────────────┘
 ```

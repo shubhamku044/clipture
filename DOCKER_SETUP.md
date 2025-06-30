@@ -1,4 +1,22 @@
-# Clipture - Containerized Setup Guide
+# Clipture Docker Setup Guide
+
+This guide explains how to set up and run Clipture using Docker, following industry best practices inspired by projects like [Monkeytype](https://github.com/monkeytypegame/monkeytype).
+
+## 📁 Docker Organization
+
+Following Monkeytype's approach, all Docker configurations are centralized in the `docker/` directory:
+
+```
+docker/
+├── compose.yml           # Production environment
+├── compose.dev.yml       # Development environment  
+├── compose.db-only.yml   # Database services only
+├── compose.test.yml      # Testing environment
+├── env.example           # Environment variables template
+└── README.md            # Docker-specific documentation
+```
+
+This organization provides:
 
 ## 🚀 Quick Start
 
@@ -39,13 +57,43 @@ make dev-down
 
 ```bash
 # Start development environment
-docker compose -f docker-compose.dev.yml up --build
+docker compose -f docker/compose.dev.yml up --build
 
 # Start in background
-docker compose -f docker-compose.dev.yml up --build -d
+docker compose -f docker/compose.dev.yml up --build -d
 
 # Stop services
-docker compose -f docker-compose.dev.yml down
+docker compose -f docker/compose.dev.yml down
+```
+
+### Database Only Mode (Monkeytype-inspired)
+
+Perfect for local development when you want to run services separately:
+
+```bash
+# Start only database services (PostgreSQL + Redis)
+make db-only
+
+# Or manually
+docker compose -f docker/compose.db-only.yml up -d
+
+# Stop database services
+make db-only-down
+```
+
+### Testing Environment
+
+Isolated testing environment with dedicated test databases:
+
+```bash
+# Run all tests in containers
+make test-env
+
+# Build and run tests
+make test-env-build
+
+# Or manually
+docker compose -f docker/compose.test.yml up --abort-on-container-exit
 ```
 
 ### Development Services
@@ -64,11 +112,18 @@ docker compose -f docker-compose.dev.yml down
 ## 🚀 Production Deployment
 
 ```bash
+# Setup environment files first
+make setup
+
+# Edit your configuration
+nano docker/.env
+nano backend/.env
+
 # Build and start all services
 make up
 
 # Or using docker compose directly
-docker compose up --build -d
+docker compose -f docker/compose.yml up --build -d
 ```
 
 ### Production Services
@@ -157,18 +212,29 @@ make db-backup
 # View all available commands
 make help
 
+# Setup development environment with all config files
+make setup
+
 # Check service health
 make health
 
+# Database-only operations (Monkeytype pattern)
+make db-only          # Start only databases
+make db-only-down     # Stop database services
+
+# Testing environment
+make test-env         # Run tests in isolated containers
+make test-env-build   # Build and run tests
+
 # View logs for specific service
-docker compose logs -f backend
-docker compose logs -f postgres
+docker compose -f docker/compose.yml logs -f backend
+docker compose -f docker/compose.yml logs -f postgres
 
 # Execute commands in containers
-docker compose exec backend sh
-docker compose exec postgres psql -U postgres -d clipture_dev
+docker compose -f docker/compose.yml exec backend sh
+docker compose -f docker/compose.yml exec postgres psql -U postgres -d clipture
 
-# Clean up everything
+# Clean up everything (cleans all compose files)
 make clean-all
 ```
 
@@ -189,7 +255,7 @@ The foundation is ready for building your screen capture and annotation service:
 
 If you get port binding errors:
 
-- PostgreSQL dev uses port 5433 (not 5432) to avoid conflicts
+- PostgreSQL dev uses port 5432 to avoid conflicts
 - Change ports in docker-compose files if needed
 
 ### Database Connection Issues
