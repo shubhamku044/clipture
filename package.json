@@ -1,0 +1,10 @@
+{
+  "name": "clipture",
+  "private": true,
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "pnpm --filter app dev",
+    "dev:landing": "pnpm --filter landing dev",
+    "build": "pnpm -r build"
+  }
+}
