@@ -1,3 +1,4 @@
+// Package router for whole application rotuer
 package router
 
 import (
@@ -7,14 +8,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/shubhamku044/clipture/internal/database"
 	"github.com/shubhamku044/clipture/internal/handlers"
+	"github.com/shubhamku044/clipture/internal/handlers/clip"
 	"github.com/shubhamku044/clipture/internal/middleware"
 )
 
-// SetupRouter sets up the router with all routes and middleware
 func SetupRouter(db *database.Database) *gin.Engine {
 	r := gin.Default()
 
-	// Add middlewares
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000", "http://localhost:5173"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -26,18 +26,15 @@ func SetupRouter(db *database.Database) *gin.Engine {
 	r.Use(middleware.ResponseFormatter())
 	r.Use(middleware.RequestLogger())
 
-	// Add NoRoute handler for proper 404 responses
 	r.NoRoute(func(c *gin.Context) {
 		middleware.RespondWithError(c, http.StatusNotFound, "NOT_FOUND", "The requested resource could not be found", gin.H{
 			"documentation": "/api/docs",
 		})
 	})
 
-	// Root health check endpoints
 	r.GET("/health", handlers.HealthCheck)
 	r.GET("/db-health", handlers.DBHealthCheck(db))
 
-	// Root welcome page
 	r.GET("/", func(c *gin.Context) {
 		middleware.RespondWithOK(c, gin.H{
 			"name":        "Clipture API",
@@ -53,10 +50,8 @@ func SetupRouter(db *database.Database) *gin.Engine {
 		})
 	})
 
-	// API v1 routes
 	v1 := r.Group("/api/v1")
 	{
-		// API v1 welcome page
 		v1.GET("/", func(c *gin.Context) {
 			middleware.RespondWithOK(c, gin.H{
 				"name":        "Clipture API",
@@ -70,11 +65,9 @@ func SetupRouter(db *database.Database) *gin.Engine {
 			})
 		})
 
-		// Health check endpoints
 		v1.GET("/health", handlers.HealthCheck)
 		v1.GET("/db-health", handlers.DBHealthCheck(db))
 
-		// Auth routes (to be implemented)
 		auth := v1.Group("/auth")
 		{
 			auth.POST("/register", func(c *gin.Context) {
@@ -85,11 +78,14 @@ func SetupRouter(db *database.Database) *gin.Engine {
 			})
 		}
 
-		// Protected routes (to be implemented)
-		protected := v1.Group("")
-		// protected.Use(middleware.Auth()) // Add auth middleware later
+		clipHandler := clip.NewHandler(config, videoSvc*video.Service)
+		clip := v1.Group("/clip")
 		{
-			// User routes
+			clip.POST("/")
+		}
+
+		protected := v1.Group("")
+		{
 			protected.GET("/profile", func(c *gin.Context) {
 				middleware.RespondWithOK(c, gin.H{"message": "Profile endpoint - to be implemented"})
 			})

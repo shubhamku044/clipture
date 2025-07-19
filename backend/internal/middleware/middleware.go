@@ -8,12 +8,10 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-// ErrorHandler middleware for handling errors
 func ErrorHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		// Process errors after handlers have run
 		if len(c.Errors) > 0 {
 			err := c.Errors.Last()
 
@@ -23,7 +21,6 @@ func ErrorHandler() gin.HandlerFunc {
 				Str("method", c.Request.Method).
 				Msg("Request error")
 
-			// If response hasn't been written yet
 			if !c.Writer.Written() {
 				switch err.Type {
 				case gin.ErrorTypePublic:
@@ -40,14 +37,12 @@ func ErrorHandler() gin.HandlerFunc {
 	}
 }
 
-// ResponseFormatter middleware for consistent response formatting
 func ResponseFormatter() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 	}
 }
 
-// RequestLogger middleware for logging requests
 func RequestLogger() gin.HandlerFunc {
 	return gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
 		log.Info().
@@ -62,7 +57,6 @@ func RequestLogger() gin.HandlerFunc {
 	})
 }
 
-// APIResponse represents a standard API response
 type APIResponse struct {
 	Success   bool        `json:"success"`
 	Data      interface{} `json:"data,omitempty"`
@@ -70,14 +64,12 @@ type APIResponse struct {
 	Timestamp time.Time   `json:"timestamp"`
 }
 
-// APIError represents an API error
 type APIError struct {
 	Code    string      `json:"code"`
 	Message string      `json:"message"`
 	Details interface{} `json:"details,omitempty"`
 }
 
-// RespondWithOK sends a successful response
 func RespondWithOK(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, APIResponse{
 		Success:   true,
@@ -86,7 +78,6 @@ func RespondWithOK(c *gin.Context, data interface{}) {
 	})
 }
 
-// RespondWithError sends an error response
 func RespondWithError(c *gin.Context, statusCode int, code string, message string, details interface{}) {
 	c.JSON(statusCode, APIResponse{
 		Success: false,

@@ -18,6 +18,7 @@ type Config struct {
 	Auth       AuthConfig
 	API        APIConfig
 	Monitoring MonitoringConfig
+	OutputDir  string
 }
 
 type ServerConfig struct {
@@ -103,6 +104,7 @@ func Load() *Config {
 			MetricsEnabled: getBoolEnv("METRICS_ENABLED", false),
 			TracingEnabled: getBoolEnv("TRACING_ENABLED", false),
 		},
+		OutputDir: "./../temp",
 	}
 }
 
