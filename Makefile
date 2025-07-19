@@ -1,4 +1,4 @@
-.PHONY: help dev build up down logs clean test
+.PHONY: help dev build up down logs clean
 
 # Default target
 help: ## Show this help message
@@ -46,13 +46,6 @@ db-only: ## Start only database services
 db-only-down: ## Stop database-only services
 	docker compose -f docker/compose.db-only.yml down
 
-# Testing (new Monkeytype-inspired feature)
-test-env: ## Start testing environment
-	docker compose -f docker/compose.test.yml up --abort-on-container-exit
-
-test-env-build: ## Build and start testing environment
-	docker compose -f docker/compose.test.yml up --build --abort-on-container-exit
-
 # Database
 db-logs: ## Show database logs
 	docker compose -f docker/compose.yml logs -f postgres
@@ -70,9 +63,6 @@ backend-shell: ## Connect to backend container shell
 backend-logs: ## Show backend logs
 	docker compose -f docker/compose.yml logs -f backend
 
-backend-test: ## Run backend tests
-	cd backend && go test ./...
-
 # Frontend
 frontend-shell: ## Connect to frontend container shell
 	docker compose -f docker/compose.yml exec app sh
@@ -85,14 +75,12 @@ clean: ## Clean up containers, networks, and volumes
 	docker compose -f docker/compose.yml down -v --remove-orphans
 	docker compose -f docker/compose.dev.yml down -v --remove-orphans
 	docker compose -f docker/compose.db-only.yml down -v --remove-orphans
-	docker compose -f docker/compose.test.yml down -v --remove-orphans
 	docker system prune -f
 
 clean-all: ## Clean up everything including images
 	docker compose -f docker/compose.yml down -v --remove-orphans --rmi all
 	docker compose -f docker/compose.dev.yml down -v --remove-orphans --rmi all
 	docker compose -f docker/compose.db-only.yml down -v --remove-orphans --rmi all
-	docker compose -f docker/compose.test.yml down -v --remove-orphans --rmi all
 	docker system prune -af
 
 # Health checks

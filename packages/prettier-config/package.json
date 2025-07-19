@@ -1,0 +1,10 @@
+{
+  "name": "@clipture/prettier-config",
+  "version": "0.0.1",
+  "description": "Shared Prettier configuration for clipture projects",
+  "main": "index.js",
+  "type": "module",
+  "files": [
+    "index.js"
+  ]
+}

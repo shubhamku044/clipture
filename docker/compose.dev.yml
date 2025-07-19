@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # PostgreSQL 14 Database
   postgres:
     image: postgres:14-alpine
     container_name: clipture-postgres-dev
@@ -17,17 +16,6 @@ services:
     networks:
       - clipture-dev-network
 
-  # Redis
-  redis:
-    image: redis:7-alpine
-    container_name: clipture-redis-dev
-    restart: unless-stopped
-    ports:
-      - '6379:6379'
-    networks:
-      - clipture-dev-network
-
-  # Backend API (Development mode)
   backend:
     build:
       context: ../backend

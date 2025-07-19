@@ -1,6 +1,8 @@
 {
   "name": "clipture",
   "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.12.4",
   "workspaces": [
     "apps/*",
     "packages/*"
@@ -10,12 +12,13 @@
     "dev:app": "pnpm --filter app dev",
     "dev:landing": "pnpm --filter landing dev",
     "build": "turbo run build",
+    "build:app": "pnpm --filter app build",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,css,scss,md,mdx}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,css,scss,md,mdx}\"",
-    "test": "turbo run test",
-    "test:watch": "turbo run test:watch",
+    "format:app": "pnpm --filter app format",
+    "format:app:check": "pnpm --filter app format:check",
     "type-check": "turbo run type-check",
     "dev:backend": "cd backend && go run ./cmd",
     "dev:all": "concurrently -n app,landing -c cyan,green \"pnpm dev:app\" \"pnpm dev:landing\"",
@@ -25,28 +28,43 @@
   "devDependencies": {
     "@commitlint/cli": "^18.4.3",
     "@commitlint/config-conventional": "^18.4.3",
+    "@clipture/eslint-config": "workspace:*",
+    "@clipture/prettier-config": "workspace:*",
     "concurrently": "^9.2.0",
     "husky": "^8.0.3",
     "lint-staged": "^15.2.0",
     "prettier": "^3.1.1",
     "turbo": "^1.11.2",
-    "vitest": "^1.1.0"
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^16.2.0",
+    "typescript-eslint": "^8.35.1",
+    "eslint": "^9.30.0",
+    "@eslint/js": "^9.30.0",
+    "@typescript-eslint/parser": "^8.35.1",
+    "@typescript-eslint/eslint-plugin": "^8.35.1"
   },
   "lint-staged": {
     "apps/app/src/**/*.{ts,tsx}": [
-      "cd apps/app && pnpm lint:fix",
+      "pnpm --filter app lint:fix",
       "prettier --write"
     ],
     "apps/landing/src/**/*.{ts,tsx}": [
-      "cd apps/landing && pnpm lint:fix",
-      "prettier --write"
-    ],
-    "packages/ui/**/*.{ts,tsx}": [
-      "cd packages/ui && pnpm lint:fix",
+      "pnpm --filter landing lint:fix",
       "prettier --write"
     ],
     "*.{json,css,scss,md,mdx}": [
       "prettier --write"
     ]
+  },
+  "dependencies": {
+    "@eslint/js": "^9.30.0",
+    "eslint": "^9.30.0",
+    "eslint-plugin-import": "^2.32.0",
+    "globals": "^16.2.0",
+    "typescript-eslint": "^8.35.1"
   }
 }

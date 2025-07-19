@@ -1,0 +1,39 @@
+{
+  "name": "@clipture/eslint-config",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./react.js": {
+      "types": "./react.d.ts",
+      "default": "./react.js"
+    }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "react.js",
+    "react.d.ts"
+  ],
+  "dependencies": {
+    "@eslint/js": "^9.15.0",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "eslint-plugin-react-refresh": "^0.4.20",
+    "globals": "^15.12.0",
+    "typescript-eslint": "^8.13.0"
+  },
+  "devDependencies": {
+    "eslint": "^9.15.0",
+    "typescript": "^5.6.3"
+  }
+}
